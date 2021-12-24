@@ -1,7 +1,9 @@
 #hello-api-python-flask/app.py
 from flask import Flask, jsonify, request
+
 # Initialise the app
 app = Flask(__name__)
+
 # Define what the app does
 @app.get("/greet")
 def index ():
@@ -16,8 +18,18 @@ def index ():
   5. If both names are provided: respond with a question,
   "Is your name <fist-name> <second-name>
   """
-  name = request.args.get( "name" )
-  if not name:
+  fname = request.args.get("fname")
+  lname = request.args.get("lname")
+
+  if not fname and not lname:
+    # If both first name and last name are missing, return an error
     return jsonify({ "status" : "error" })
-  response = { "data" : f"Hello, {name} !" }
+  elif fname and not lname:
+    # If first name is present but last name is missing
+    response = {"data":f"Hello, {fname}"}
+  elif not fname and lname:
+    # If first name is missing but last name is present
+    response = {"data":f"Hello, Mr. {lname}!"}
+  else:
+    response = {"data":f"Is your name, {fname} {lname}?" }
   return jsonify(response)
